@@ -5,16 +5,20 @@
         <title>{% block page_title %}Source: An OpenNews project{% endblock %}</title>
         <meta name="description" content="Source - Journalism Code, Context & Community">
         <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1;">
-        {% block site_css %}
-        {{ css('sourceapp_css') }}
-        {% endblock %}
+        {% compress css %}
+            <link href="{{ static('base/css/bootstrap.css') }}" rel="stylesheet">
+            <link href="{{ static('base/css/font-awesome.css') }}" rel="stylesheet">
+            <link href="{{ static('base/css/app.css') }}" rel="stylesheet">
+        {% endcompress %}
         <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'>
-        <script src="{{ MEDIA_URL }}js/libs/modernizr-2.0.6.min.js"></script>
+        {% compress js %}
+            <script src="{{ static('base/js/libs/modernizr-2.0.6.min.js') }}"></script>
+        {% endcompress %}
         {% block head_extra %}{% endblock %}
         {% if rss_link %}
         <link rel="alternate" href="{{ rss_link }}" type="application/rss+xml" title="RSS" />
         {% endif %}
-        <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.ico" />
+        <link rel="shortcut icon" href="{{ static('base/img/favicon.ico') }}" />
     </head>
     <body>
         <header id="topbar">
@@ -37,12 +41,12 @@
                 {% endfor %}
                 </ul>
 
-                <a href="{{ url('homepage') }}"><img src="{{ MEDIA_URL }}img/source_retina_top.png" alt="Source" class="sourcelogomin"></a>
+                <a href="{{ url('homepage') }}"><img src="{{ static('base/img/source_retina_top.png') }}" alt="Source" class="sourcelogomin"></a>
             </div>
         </header>
         <div class="content">
             <div class="container page-block">
-                <a href="{{ url('homepage') }}"><img id="main-logo" src="{{ MEDIA_URL }}img/source_retina.png" alt="Source"></a>
+                <a href="{{ url('homepage') }}"><img id="main-logo" src="{{ static('base/img/source_retina.png') }}" alt="Source"></a>
                 {% block base_tagline %}{% endblock %}
             </div>
         
@@ -79,20 +83,24 @@
        </section>
         {% endblock footer %}</footer>
 
-{% block site_js %}
+        {% block site_js %}
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="{{ MEDIA_URL }}js/libs/jquery-1.7.2.min.js"><\/script>')</script>
-        {{ js('sourceapp_js') }}
-        {% endblock %}{% block site_js_extra %}{% endblock %}
-        
-{% block google_analytics %}
-        <script>
-            window._gaq = [['_setAccount','UA-33507926-1'],['_trackPageview'],['_trackPageLoadTime']];
-            Modernizr.load({
-                load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
-            });
-        </script>{% endblock google_analytics %}
-        
+        {% compress js %}
+            <script src="{{ static('base/js/app.js') }}"></script>
+        {% endcompress %}
+        {% endblock %}
+        {% block site_js_extra %}{% endblock %}
+        {% if not settings.DEBUG %}
+            {% block google_analytics %}
+            <script>
+                window._gaq = [['_setAccount','UA-33507926-1'],['_trackPageview'],['_trackPageLoadTime']];
+                Modernizr.load({
+                    load: ('https:' == location.protocol ? '//ssl' : '//www') + '.google-analytics.com/ga.js'
+                });
+            </script>
+            {% endblock google_analytics %}
+        {% endif %}
     </body>
 </html>
 
