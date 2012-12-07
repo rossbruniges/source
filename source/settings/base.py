@@ -29,6 +29,7 @@ INSTALLED_APPS = list(INSTALLED_APPS) + [
 
 TEMPLATE_CONTEXT_PROCESSORS = list(TEMPLATE_CONTEXT_PROCESSORS) + [
     'source.base.context_processors.http_protocol',
+    'source.base.context_processors.warnr',
 ]
 
 # Adding to standard funfactory middleware classes. Need to insert the

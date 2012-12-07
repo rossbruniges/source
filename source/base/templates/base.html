@@ -18,10 +18,18 @@
         {% if rss_link %}
         <link rel="alternate" href="{{ rss_link }}" type="application/rss+xml" title="RSS" />
         {% endif %}
+        {% if APP_MSG %}
+            <link rel="stylesheet" href="{{ static('base/css/warnr.css') }}">
+        {% endif %}
         <link rel="shortcut icon" href="{{ static('base/img/favicon.ico') }}" />
     </head>
     <body>
         <header id="topbar">
+            {% if APP_MSG %}
+                <div id="app_stage_box" class="whimper">
+                    <div class="busta">{{ APP_MSG|safe }}</div>
+                </div>
+            {% endif %}
             <div class="container">
                 <form class="search-form" method="get" action="{{ url('haystack_search') }}">
                     <input type="text" name="q" id="id_q" />
