@@ -13,28 +13,28 @@ Installation
 
 ### Requirements
 
-You need Python 2.6 or 2.7, Mozilla's [funfactory][funfactory], MySQL, git, virtualenv, and a Unix-like OS.
+You need Python 2.6 or 2.7, MySQL, git, virtualenv (remeber to install as sudo so it has the correct permissions), and a Unix-like OS including a compiler (something like [xcode][xcode] is perfect)
 
-[funfactory]: https://github.com/mozilla/funfactory
+[xcode]: https://developer.apple.com/xcode/
 
 ### Setup
 
-First, make sure you've got funfactory installed, because the Playdoh app template will need it.
-
-`pip install funfactory`
-
-Then:
-
-1. Fork and/or clone this Source repository from GitHub
-2. Set up a virtual environment for your new project
-3. Activate your virtualenv and cd into the project directory
-4. Fetch the submodule dependancies
-
-`git submodule update --init --recursive`
-
-And make sure you have all the development requirements
-
-`pip install -r requirements/dev.txt`
+1. Fork [the core source repository][source-repo]
+2. Clone your new repo:
+    `git clone --recursive git@github:{you}/source.git`
+3. Jump inside of the new app you've just cloaned
+    `cd source`
+4. Set up a new [virtual environment][venv] (no, you really should):
+    1. If you haven't already, install virtualenv[^1]:
+        `pip install virtualenv`
+    2. Make sure you're in the repo folder:
+        `cd source`
+    3. Create a virtual environment in the `venv` subfolder:
+        `virtualenv venv`
+    4. And activate it:
+        `source venv/bin/activate`
+5. And make sure you have all the development and compiled requirements
+    `pip install -r requirements/dev.txt`
 
 ### Configuration
 
@@ -42,7 +42,7 @@ The app has a base settings file that can be found at source/settings/base.py, y
 
 `cp source/settings/local.py-dist source/settings/local.py`
 
-Please ensure that you create your own SECRET_KEY and HMAC_KEY
+Please ensure that you create your own SECRET_KEY ([use this to create a secret key][secretkey-gen]) and HMAC_KEY (use todays date and any word you like)
 
 You can point your database config to sqlite for quick testing, or if you'd rather use MySQL, you'll need to create a new database. Adjust the DATABASES dict in source/settings/local.py accordingly, and then
 
@@ -66,3 +66,29 @@ And then it's time to fire it up!
 Now you should be able view your dev server at [http://localhost:8000/][localhost]
 
 [localhost]: http://localhost:8000/
+[source-repo]: https://github.com/mozilla/source
+[venv]: http://pypi.python.org/pypi/virtualenv
+[secretkey-gen]: http://www.miniwebtool.com/django-secret-key-generator/
+
+### Troubleshooting
+
+#### Installation 
+
+If you receive error messages complaining about files inside of the vendor directory
+you've probably forgotten the --recursive flag when doing your initial clone.
+
+The vendor directory gets created from a large number of git submodules containing
+a number of useful Mozilla products that we like to bundle with all our apps.
+
+From inside of the root source directory run:
+`git submodule update --init --recursive`
+
+and the vendor directory should be created this time around.
+
+#### Running the app 
+
+If when trying to runserver you get a number of 'app missing or out of date errors'
+then you probably need to update or install some sub-modules.
+
+From inside of the root source directory run:
+`git submodule update --init --recursive`
